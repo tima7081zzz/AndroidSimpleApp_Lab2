@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">AndroidLab1</string>
+    <string name="radio_range0to100">0 - 100</string>
+    <string name="radio_range10to100">10 -100</string>
+    <string name="radio_range100to400">100 - 400</string>
+    <string name="radio_range400to1000">400 - 1000</string>
+    <string name="white">white</string>
+    <string name="red">red</string>
+    <string name="green">green</string>
+</resources>
