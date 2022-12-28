@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
             CharSequence orderedFlowers = ((EditText) findViewById(R.id.flower)).getText();
             if (orderedFlowers.length() == 0)
             {
-                orderedFlowers = NoneValue;a
+                orderedFlowers = NoneValue;
             }
             CharSequence selectedPrice = getSelectButtonTextByRadioGroupId(R.id.priceRadioGroup);
             CharSequence selectedColor = getSelectButtonTextByRadioGroupId(R.id.colorRadioGroup);

@@ -74,13 +74,11 @@
         android:layout_marginTop="16dp"
         android:text="Ok" />
 
-    <TextView
-        android:id="@+id/outputTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:textSize="20sp" />
-
-
+    <androidx.fragment.app.FragmentContainerView layout_width="match_parent"
+        android:id="@+id/fragment_container_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:name="com.example.androidlab1.ContentFragment" />
 
 </LinearLayout>
