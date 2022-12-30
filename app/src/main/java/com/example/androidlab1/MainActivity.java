@@ -5,48 +5,73 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
-    private CharSequence NoneValue = "None";
+    private String NoneValue = "None";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
+        setContentView(R.layout.activity_main);
         addOnClickListenerOnOutput();
     }
 
-    private void addOnClickListenerOnOutput()    {
+
+    private void addOnClickListenerOnOutput() {
         Button okButton = findViewById(R.id.response_button);
-        okButton.setOnClickListener(view -> {
-            CharSequence orderedFlowers = ((EditText) findViewById(R.id.flower)).getText();
-            if (orderedFlowers.length() == 0)
-            {
-                orderedFlowers = NoneValue;
+        okButton.setOnClickListener(v -> {
+
+            ContentFragment fragment = (ContentFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container_view);
+            if (fragment == null) {
+                return;
             }
-            CharSequence selectedPrice = getSelectButtonTextByRadioGroupId(R.id.priceRadioGroup);
-            CharSequence selectedColor = getSelectButtonTextByRadioGroupId(R.id.colorRadioGroup);
 
-            CharSequence output = String.format("You have made an order! \n Flowers - %s, \n Color - %s," +
-                    " \n Price range - %s", orderedFlowers, selectedColor, selectedPrice);
+            try {
+                CharSequence orderedFlowers = getEditTestValueById(R.id.flower);
+                CharSequence selectedPrice = getSelectButtonTextByRadioGroupId(R.id.priceRadioGroup);
+                CharSequence selectedColor = getSelectButtonTextByRadioGroupId(R.id.colorRadioGroup);
 
-            TextView outputTextView = findViewById(R.id.outputTextView);
-            outputTextView.setText(output);
+                fragment.outputOrder(orderedFlowers, selectedPrice, selectedColor);
+
+            } catch (NonFilledException e) {
+                fragment.outputNonFilledError(e.getMessage());
+            }
         });
     }
 
     @NonNull
-    private CharSequence getSelectButtonTextByRadioGroupId(int radioGroupId)    {
+    private CharSequence getSelectButtonTextByRadioGroupId(int radioGroupId) throws NonFilledException {
         RadioGroup radioGroup = findViewById(radioGroupId);
         RadioButton selectedButton = findViewById(radioGroup.getCheckedRadioButtonId());
 
-        return selectedButton == null ? NoneValue : selectedButton.getText();
+        if (selectedButton == null) {
+            throw new NonFilledException(getRequiredFieldNameByRadioGroupId(radioGroupId));
+        }
+
+        return selectedButton.getText();
     }
 
+    private CharSequence getEditTestValueById(int id) throws NonFilledException {
+        CharSequence orderedFlowers = ((EditText) findViewById(id)).getText();
+        if (orderedFlowers.length() == 0) {
+            throw new NonFilledException("flower name");
+        }
+
+        return orderedFlowers;
+    }
+
+    private String getRequiredFieldNameByRadioGroupId(int id) {
+        switch (id) {
+            case R.id.priceRadioGroup:
+                return "price";
+            case R.id.colorRadioGroup:
+                return "color";
+        }
+        return NoneValue;
+    }
 }
